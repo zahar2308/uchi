@@ -1,9 +1,22 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SelectField, SubmitField
-from wtforms.validators import Length,DataRequired
+from wtforms import StringField, TextAreaField, SelectField, SubmitField, PasswordField, BooleanField
+from wtforms.validators import Length, DataRequired, Optional, Email, EqualTo
 
 from .models import Category
 
+class LoginForm(FlaskForm):
+    username = StringField('Имя пользователя', validators=[DataRequired()])
+    password = PasswordField('Пароль', validators=[DataRequired()])
+    remember = BooleanField('Запомнить меня')
+    submit = SubmitField('Войти')
+
+class RegistrationForm(FlaskForm):
+    username = StringField('Имя пользователя', validators=[DataRequired()])
+    name = StringField('Имя', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email(message='Некорректный email'),])
+    password = PasswordField('Пароль',validators=[DataRequired()])
+    password2 = PasswordField('Повторите пароль', validators=[DataRequired(),EqualTo('password',message='Пароли не совпадают')])
+    submit = SubmitField('Зарегистрироваться')
 def get_categories():
     categories = Category.query.all()
     return [(category.id, category.title) for category in categories]
