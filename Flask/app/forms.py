@@ -4,6 +4,11 @@ from wtforms.validators import Length, DataRequired, Optional, Email, EqualTo
 
 from .models import Category
 
+class CategoryForm(FlaskForm):
+    title = StringField('Название категории', validators=[DataRequired()])
+    submit = SubmitField('Добавить')
+
+
 class LoginForm(FlaskForm):
     username = StringField('Имя пользователя', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired()])

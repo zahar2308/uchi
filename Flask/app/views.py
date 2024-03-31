@@ -1,7 +1,7 @@
 from flask import Flask, render_template,redirect, url_for, request, flash
 from  flask_login import login_user, logout_user, login_required, current_user
 from . import app, db
-from .forms import NewsForm, RegistrationForm, LoginForm
+from .forms import NewsForm, RegistrationForm, LoginForm,CategoryForm
 from  .models import Category, News, User
 
 @app.route('/registration/', methods=['GET', 'POST'])
@@ -88,3 +88,14 @@ def news_in_category(id):
                            categories=categories)
 
 
+@app.route('/add_category', methods=['GET', 'POST'])
+def add_category():
+    form = CategoryForm()
+    categories = Category.query.all()
+    if form.validate_on_submit():
+        category = Category()
+        category.title = form.title.data
+        db.session.add(category)
+        db.session.commit()
+        return redirect(url_for('index'))
+    return render_template('add_category.html', form=form,categories=categories)
