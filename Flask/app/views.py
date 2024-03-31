@@ -89,6 +89,7 @@ def news_in_category(id):
 
 
 @app.route('/add_category', methods=['GET', 'POST'])
+@login_required
 def add_category():
     form = CategoryForm()
     categories = Category.query.all()
